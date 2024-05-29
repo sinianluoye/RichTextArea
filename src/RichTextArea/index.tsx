@@ -106,7 +106,8 @@ const withImages = (editor: ReactEditor) => {
     const { files } = data;
 
     if (files && files.length > 0) {
-      for (const file of files) {
+      const filesArray = Array.from(files);
+      for (const file of filesArray) {
         const reader = new FileReader();
         const [mime] = file.type.split('/');
 
