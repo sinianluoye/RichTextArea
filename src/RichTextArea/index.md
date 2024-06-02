@@ -25,6 +25,9 @@ export default () => {
           onCompositionEnd={(e) => {console.log("onCompositionEnd:", e)}}
           onCompositionStart={() => {console.log("onCompositionStart")}}
           style={{backgroundColor: '#abcdef'}}
+          imageStyle={{
+            maxHeight: '200px'
+          }}
         ></RichTextArea>
         <button onClick={()=>{ref.current?.clearContent()}}>clear</button>
         <button onClick={()=>{ref.current?.insertText("this is inserted text")}}>insert text</button>

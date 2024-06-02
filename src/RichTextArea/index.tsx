@@ -73,17 +73,20 @@ const renderImageElement = ({
 ) => {
   return (
     <div
+      className={`${className} rich-text-area-image-element-container-outer`}
       {...attributes}
       style={{ display: 'inline-flex', alignItems: 'flex-end' }}
     >
       <div
+        className={`${className} rich-text-area-image-element-container-inner`}
         contentEditable={false}
         style={{ display: 'inline-flex', alignItems: 'flex-end' }}
       >
         <Image
+          className={`${className} rich-text-area-image-element-image`}
           src={(element as ImageElementType).image_url.url}
           alt=""
-          style={{ display: 'inline-flex', verticalAlign: 'bottom' }}
+          style={{ display: 'inline-flex', verticalAlign: 'bottom', ...style }}
         />
       </div>
       {children}
