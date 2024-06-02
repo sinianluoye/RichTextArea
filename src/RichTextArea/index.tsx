@@ -16,16 +16,16 @@ import {
   withReact,
 } from 'slate-react';
 
-export type RichTextAreaEditor = BaseEditor & ReactEditor & HistoryEditor;
+type RichTextAreaEditor = BaseEditor & ReactEditor & HistoryEditor;
 
-export type Text = { text: string };
+type Text = { text: string };
 
-export type TextElementType = {
+type TextElementType = {
   type: 'paragraph';
   children: Text[];
 } & Element;
 
-export type ImageElementType = {
+type ImageElementType = {
   type: 'image_url';
   image_url: {
     url: string;
@@ -33,9 +33,9 @@ export type ImageElementType = {
   children: Text[];
 } & Element;
 
-export type RichTextAreaElementType = ImageElementType | TextElementType;
+type RichTextAreaElementType = ImageElementType | TextElementType;
 
-export type RichTextAreaStyle = {
+type RichTextAreaStyle = {
   border?: string;
   padding?: string;
   lineHeight?: string;
@@ -188,7 +188,7 @@ const handleKeyDownTab = (event: React.KeyboardEvent, editor: ReactEditor) => {
   }
 };
 
-export type RichTextAreaProps = {
+type RichTextAreaProps = {
   disabled?: boolean;
   border?: string;
   padding?: string;
@@ -204,7 +204,7 @@ export type RichTextAreaProps = {
   className?: string;
 };
 
-export type RichTextAreaRef = {
+type RichTextAreaRef = {
   clearContent: () => void;
   insertText: (text: string) => void;
   insertImage: (url: string) => void;
@@ -336,5 +336,11 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
     );
   },
 );
-
 export default RichTextArea;
+export type {
+  RichTextAreaRef,
+  RichTextAreaEditor,
+  RichTextAreaElementType,
+  RichTextAreaProps,
+  RichTextAreaStyle,
+};

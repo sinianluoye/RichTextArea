@@ -5,18 +5,10 @@ hero:
   actions:
     - text: Hello
       link: /
-    - text: World
-      link: /
 features:
-  - title: Hello
+  - title: feature
     emoji: 💎
-    description: Put hello description here
-  - title: World
-    emoji: 🌈
-    description: Put world description here
-  - title: '!'
-    emoji: 🚀
-    description: Put ! description here
+    description: Put feature description here
 ---
 
 @sinianluoye/rich-text-area
