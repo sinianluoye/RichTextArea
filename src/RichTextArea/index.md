@@ -16,6 +16,7 @@ export default () => {
     return (
       <div>
         <RichTextArea 
+          className={'text-class-name'}
           ref={ref}
           disabled={false}
           onEditorValueChange={(value) => {console.log("onEditorValueChange:", value)}}

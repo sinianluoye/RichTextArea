@@ -53,10 +53,11 @@ declare module 'slate' {
 
 const renderTextElement = (
   { attributes, children, element }: RenderElementProps,
-  style: any,
+  style?: CSSProperties,
+  className?: string,
 ) => {
   return (
-    <div {...attributes} style={style}>
+    <div className={className} {...attributes} style={style}>
       {children}
     </div>
   );
@@ -66,7 +67,10 @@ const renderImageElement = ({
   attributes,
   children,
   element,
-}: RenderElementProps) => {
+}: RenderElementProps,
+  style?: CSSProperties,
+  className?: string,
+) => {
   return (
     <div
       {...attributes}
@@ -203,6 +207,7 @@ type RichTextAreaProps = {
   onPressEnter?: (event: React.KeyboardEvent) => void;
   className?: string;
   style?: CSSProperties;
+  imageStyle?: CSSProperties;
 };
 
 type RichTextAreaRef = {
@@ -233,6 +238,7 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
       onPressEnter = null,
       className = 'rich-text-area',
       style = {},
+      imageStyle = {}
     } = props;
 
     const renderElement = useCallback(
@@ -245,9 +251,14 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
               paddingBottom: paddingBottom,
               margin: 0,
             },
+            `${className} rich-text-area-paragraph-element`
           );
         } else if ((element as RichTextAreaElementType).type === 'image_url') {
-          return renderImageElement({ attributes, children, element });
+          return renderImageElement(
+            { attributes, children, element },
+            imageStyle,
+            `${className} rich-text-area-image-element`
+          );
         } else {
           console.error(`Unknown element ${element}`);
           return renderTextElement(
@@ -257,6 +268,7 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
               paddingBottom: paddingBottom,
               margin: 0,
             },
+            `${className} rich-text-area-error-element`
           );
         }
       },
@@ -327,7 +339,7 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
         }}
       >
         <Editable
-          className={`${className} rich-text-area`}
+          className={`${className} rich-text-area-editable`}
           placeholder={placeholder}
           renderPlaceholder={({ attributes, children }) => (
             <span 
