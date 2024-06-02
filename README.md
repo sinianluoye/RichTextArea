@@ -7,11 +7,45 @@ a text area with image
 
 ## Usage
 
-TODO
+```jsx
+<RichTextArea 
+    ref={ref}
+    disabled={false}
+    onEditorValueChange={(value) => {console.log("onEditorValueChange:", value)}}
+    onFocus={(event) => {console.log("onFocus:", event)}}
+    onPressEnter={(event) => {console.log("onPressEnter:", event)}}
+    onCompositionEnd={() => {console.log("onCompositionEnd")}}
+    onCompositionStart={() => {console.log("onCompositionStart")}}
+></RichTextArea>
+```
 
 ## Options
 
-TODO
+```tsx
+type RichTextAreaProps = {
+  disabled?: boolean;
+  border?: string;
+  padding?: string;
+  lineHeight?: string;
+  paddingBottom?: string;
+  maxHeight?: string;
+  placeholder?: string;
+  onEditorValueChange?: (value: RichTextAreaElementType[]) => void;
+  onCompositionStart?: () => void;
+  onCompositionEnd?: () => void;
+  onFocus?: (event: React.FocusEvent) => void;
+  onPressEnter?: (event: React.KeyboardEvent) => void;
+  className?: string;
+};
+
+type RichTextAreaRef = {
+  clearContent: () => void;
+  insertText: (text: string) => void;
+  insertImage: (url: string) => void;
+  focus: () => void;
+  blur: () => void;
+};
+```
 
 ## Development
 

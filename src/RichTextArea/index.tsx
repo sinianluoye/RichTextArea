@@ -87,7 +87,7 @@ const renderImageElement = ({
 };
 
 const withImages = (editor: ReactEditor) => {
-  const { insertData, isVoid, isInline } = editor;
+  const { isVoid, isInline } = editor;
 
   editor.isInline = (element) => {
     return (element as RichTextAreaElementType).type === 'image_url'
@@ -208,6 +208,8 @@ type RichTextAreaRef = {
   clearContent: () => void;
   insertText: (text: string) => void;
   insertImage: (url: string) => void;
+  focus: () => void;
+  blur: () => void;
 };
 
 const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
@@ -300,6 +302,8 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
       clearContent,
       insertText,
       insertImage,
+      focus: () => ReactEditor.focus(editor),
+      blur: () => ReactEditor.blur(editor),
     }));
 
     return (
