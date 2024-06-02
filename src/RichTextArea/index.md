@@ -23,6 +23,7 @@ export default () => {
           onPressEnter={(event) => {console.log("onPressEnter:", event)}}
           onCompositionEnd={(e) => {console.log("onCompositionEnd:", e)}}
           onCompositionStart={() => {console.log("onCompositionStart")}}
+          style={{backgroundColor: '#abcdef'}}
         ></RichTextArea>
         <button onClick={()=>{ref.current?.clearContent()}}>clear</button>
         <button onClick={()=>{ref.current?.insertText("this is inserted text")}}>insert text</button>

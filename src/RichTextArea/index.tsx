@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useImperativeHandle,
   useState,
+  CSSProperties
 } from 'react';
 import { BaseEditor, Editor, Element, Transforms, createEditor } from 'slate';
 import { HistoryEditor, withHistory } from 'slate-history';
@@ -201,6 +202,7 @@ type RichTextAreaProps = {
   onFocus?: (event: React.FocusEvent) => void;
   onPressEnter?: (event: React.KeyboardEvent) => void;
   className?: string;
+  style?: CSSProperties;
 };
 
 type RichTextAreaRef = {
@@ -230,6 +232,7 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
       onFocus = () => {},
       onPressEnter = null,
       className = 'rich-text-area',
+      style = {},
     } = props;
 
     const renderElement = useCallback(
@@ -352,7 +355,8 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
             lineHeight: lineHeight,
             maxHeight: maxHeight,
             overflowY: 'auto',
-            overflowX: 'hidden'
+            overflowX: 'hidden',
+            ...style
           }}
           onKeyDown={(event) => handleKeyDown(event, editor)}
           onCompositionStart={onCompositionStart}
