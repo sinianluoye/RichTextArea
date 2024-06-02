@@ -21,7 +21,7 @@ export default () => {
           onEditorValueChange={(value) => {console.log("onEditorValueChange:", value)}}
           onFocus={(event) => {console.log("onFocus:", event)}}
           onPressEnter={(event) => {console.log("onPressEnter:", event)}}
-          onCompositionEnd={() => {console.log("onCompositionEnd")}}
+          onCompositionEnd={(e) => {console.log("onCompositionEnd:", e)}}
           onCompositionStart={() => {console.log("onCompositionStart")}}
         ></RichTextArea>
         <button onClick={()=>{ref.current?.clearContent()}}>clear</button>

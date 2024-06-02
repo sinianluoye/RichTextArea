@@ -164,7 +164,6 @@ const handleKeyDownEnter = (
     event.metaKey === false &&
     event.altKey === false
   ) {
-    event.preventDefault();
     Transforms.insertNodes(editor, {
       type: 'paragraph',
       children: [{ text: '' }],
@@ -198,7 +197,7 @@ type RichTextAreaProps = {
   placeholder?: string;
   onEditorValueChange?: (value: RichTextAreaElementType[]) => void;
   onCompositionStart?: () => void;
-  onCompositionEnd?: () => void;
+  onCompositionEnd?: (e: React.CompositionEvent) => void;
   onFocus?: (event: React.FocusEvent) => void;
   onPressEnter?: (event: React.KeyboardEvent) => void;
   className?: string;
@@ -227,7 +226,7 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
       placeholder = 'input something...',
       onEditorValueChange = () => {},
       onCompositionStart = () => {},
-      onCompositionEnd = () => {},
+      onCompositionEnd = (e:React.CompositionEvent) => {},
       onFocus = () => {},
       onPressEnter = null,
       className = 'rich-text-area',
@@ -262,13 +261,18 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
     );
 
     const handleKeyDown = (event: React.KeyboardEvent, editor: ReactEditor) => {
-      if (onPressEnter !== null) {
-        onPressEnter(event);
-      } else {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        if (onPressEnter !== null) {
+          onPressEnter(event);
+        }
         handleKeyDownEnter(event, editor);
       }
-      handleKeyDownTab(event, editor);
+      else if(event.key == 'Tab') {
+        handleKeyDownTab(event, editor);
+      }
     };
+
     if (disabled) {
       return null;
     }
@@ -320,8 +324,27 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
         }}
       >
         <Editable
-          className={className}
+          className={`${className} rich-text-area`}
           placeholder={placeholder}
+          renderPlaceholder={({ attributes, children }) => (
+            <span 
+              {...attributes} 
+              style={{ 
+                fontStyle: 'italic', 
+                color: 'gray',
+                lineHeight: lineHeight,
+                maxHeight: maxHeight,
+                position: 'absolute',
+                pointerEvents: 'none',
+                display: 'block', 
+                userSelect: 'none', 
+                textDecoration: 'none'
+              }}
+              contentEditable={false}
+            >
+              {children}
+            </span>
+          )}
           renderElement={renderElement}
           style={{
             border: border,
@@ -329,7 +352,7 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
             lineHeight: lineHeight,
             maxHeight: maxHeight,
             overflowY: 'auto',
-            overflowX: 'hidden',
+            overflowX: 'hidden'
           }}
           onKeyDown={(event) => handleKeyDown(event, editor)}
           onCompositionStart={onCompositionStart}
