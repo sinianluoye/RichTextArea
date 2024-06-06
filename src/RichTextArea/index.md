@@ -24,7 +24,7 @@ export default () => {
           onPressEnter={(event) => {console.log("onPressEnter:", event)}}
           onCompositionEnd={(e) => {console.log("onCompositionEnd:", e)}}
           onCompositionStart={() => {console.log("onCompositionStart")}}
-          style={{backgroundColor: '#abcdef'}}
+          style={{backgroundColor: '#1c1c1c', color: '#c1c1c1'}}
           imageStyle={{
             maxHeight: '200px'
           }}

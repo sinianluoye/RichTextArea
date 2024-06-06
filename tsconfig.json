@@ -9,8 +9,11 @@
     "paths": {
       "@@/*": [".dumi/tmp/*"],
       "@sinianluoye/rich-text-area": ["src"],
-      "@sinianluoye/rich-text-area/*": ["src/*", "*"]
-    }
+      "@sinianluoye/rich-text-area/*": ["src/*", "*"],
+      "*": ["node_modules/*"]
+    },
+    "target": "esnext",
+    "moduleResolution": "node"
   },
   "include": [".dumirc.ts", "src/**/*"]
 }

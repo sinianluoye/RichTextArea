@@ -43,9 +43,6 @@ devDependencies:
   father:
     specifier: ^4.1.0
     version: 4.4.1(@babel/core@7.24.6)(@types/node@20.5.1)(styled-components@6.1.11)(webpack@5.91.0)
-  husky:
-    specifier: ^8.0.1
-    version: 8.0.3
   lint-staged:
     specifier: ^13.0.3
     version: 13.3.0
@@ -7342,12 +7339,6 @@ packages:
 
   /humps@2.0.1:
     resolution: {integrity: sha512-E0eIbrFWUhwfXJmsbdjRQFQPrl5pTEoKlz163j1mTqqUnU9PgR4AgB8AIITzuB3vLBdxZXyZ9TDIrwB2OASz4g==}
-    dev: true
-
-  /husky@8.0.3:
-    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
-    engines: {node: '>=14'}
-    hasBin: true
     dev: true
 
   /iconv-lite@0.4.24:

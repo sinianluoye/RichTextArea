@@ -5,9 +5,10 @@ import React, {
   useCallback,
   useImperativeHandle,
   useState,
-  CSSProperties
+  CSSProperties,
+  useEffect
 } from 'react';
-import { BaseEditor, Editor, Element, Transforms, createEditor } from 'slate';
+import { BaseEditor, Editor, Element, Transforms, createEditor, Range, Point, Path, node } from 'slate';
 import { HistoryEditor, withHistory } from 'slate-history';
 import {
   Editable,
@@ -15,9 +16,13 @@ import {
   RenderElementProps,
   Slate,
   withReact,
+  useFocused,
+  useSelected,
 } from 'slate-react';
 
-type RichTextAreaEditor = BaseEditor & ReactEditor & HistoryEditor;
+type RichTextAreaEditor = BaseEditor & ReactEditor & HistoryEditor & {
+  
+};
 
 type Text = { text: string };
 
@@ -71,31 +76,38 @@ const renderImageElement = ({
   style?: CSSProperties,
   className?: string,
 ) => {
+  const focused = useFocused();
+  const selected = useSelected();
+  const src = (element as ImageElementType).image_url.url;
   return (
     <div
-      className={`${className} rich-text-area-image-element-container-outer`}
+      className={`${className} rich-text-area-image-element-container`}
       {...attributes}
-      style={{ display: 'inline-flex', alignItems: 'flex-end' }}
+      style={{ 
+        display: 'inline',
+        margin: '5px',
+      }}
+      contentEditable={false}
     >
-      <div
-        className={`${className} rich-text-area-image-element-container-inner`}
-        contentEditable={false}
-        style={{ display: 'inline-flex', alignItems: 'flex-end' }}
-      >
-        <Image
-          className={`${className} rich-text-area-image-element-image`}
-          src={(element as ImageElementType).image_url.url}
-          alt=""
-          style={{ display: 'inline-flex', verticalAlign: 'bottom', ...style }}
-        />
-      </div>
+      <Image
+        className={`${className} rich-text-area-image-element-image`}
+        src={src}
+        alt=""
+        style={{ 
+          ...style,
+          display: 'inline', 
+          verticalAlign: 'bottom',
+          boxShadow: `${(selected && focused) ? '0 0 0 3px #7dc1c7' : 'none'}` 
+        }}
+      />
       {children}
     </div>
   );
 };
 
-const withImages = (editor: ReactEditor) => {
-  const { isVoid, isInline } = editor;
+const withImages = (inputEditor: ReactEditor) => {
+  const { isVoid, isInline } = inputEditor;
+  const editor = inputEditor as RichTextAreaEditor;
 
   editor.isInline = (element) => {
     return (element as RichTextAreaElementType).type === 'image_url'
@@ -163,7 +175,7 @@ const initialValue = [
 
 const handleKeyDownEnter = (
   event: React.KeyboardEvent,
-  editor: ReactEditor,
+  editor: RichTextAreaEditor,
 ) => {
   if (
     event.key === 'Enter' &&
@@ -188,7 +200,7 @@ const handleKeyDownEnter = (
   }
 };
 
-const handleKeyDownTab = (event: React.KeyboardEvent, editor: ReactEditor) => {
+const handleKeyDownTab = (event: React.KeyboardEvent, editor: RichTextAreaEditor) => {
   if (event.key === 'Tab') {
     event.preventDefault();
     editor.insertText('\t');
@@ -278,7 +290,7 @@ const RichTextArea = forwardRef<RichTextAreaRef, RichTextAreaProps>(
       [],
     );
 
-    const handleKeyDown = (event: React.KeyboardEvent, editor: ReactEditor) => {
+    const handleKeyDown = (event: React.KeyboardEvent, editor: RichTextAreaEditor) => {
       if (event.key === 'Enter') {
         event.preventDefault();
         if (onPressEnter !== null) {
