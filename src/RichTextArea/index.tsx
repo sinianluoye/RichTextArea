@@ -105,8 +105,60 @@ const renderImageElement = ({
   );
 };
 
+export const deserialize = (el:HTMLElement, editor:Editor, isInBody:boolean[]|null = null) => {
+  if (isInBody === null) {
+    isInBody = [false];
+  }
+  if (isInBody.length == 0) {
+    isInBody.push(false);
+  }
+  if (el.nodeName === '#comment') {
+    if(el.nodeValue === "StartFragment") {
+      isInBody[0] = true;
+      return;
+    }
+    if(el.nodeValue === "EndFragment") {
+      isInBody[0] = false;
+      return;
+    }
+  }
+  if (el.className === "ant-image-mask") {
+    return;
+  }
+  
+  let cur = null;
+  if (el.nodeType === 3) {
+    cur = el.textContent;
+  } else if(el.nodeName === 'BR') {
+    cur = "\n";
+  }
+  if (cur !== null) {
+    if (!isInBody[0]) {
+      return;
+    }
+    Transforms.insertText(editor, cur);
+  }
+  if (el.nodeType !== 1) {
+    return;
+  }
+  if (el.nodeName === 'IMG') {
+    Transforms.insertNodes(editor, [{
+      type: 'image_url', 
+      image_url: {
+        url: (el as HTMLImageElement).src
+      }, 
+      children: [{text: ''}]
+    } as ImageElementType]);
+    Transforms.move(editor, { distance: 1, unit: 'offset' });
+    return;
+  }
+  let parent = el;
+  Array.from(parent.childNodes).forEach((x) => deserialize(x, editor, isInBody));
+}
+
+
 const withImages = (inputEditor: ReactEditor) => {
-  const { isVoid, isInline } = inputEditor;
+  const { isVoid, isInline, insertData } = inputEditor;
   const editor = inputEditor as RichTextAreaEditor;
 
   editor.isInline = (element) => {
@@ -122,6 +174,14 @@ const withImages = (inputEditor: ReactEditor) => {
   };
 
   editor.insertData = (data) => {
+
+    const html = data.getData('text/html')
+
+    if (html) {
+      const parsed = new DOMParser().parseFromString(html, 'text/html')
+      deserialize(parsed.body, editor)
+      return
+    }
     const text = data.getData('text/plain');
     const { files } = data;
 
@@ -149,18 +209,9 @@ const withImages = (inputEditor: ReactEditor) => {
         }
       }
     } else {
-      const lines = text.split('\n');
-      lines.forEach((line, index) => {
-        if (index > 0) {
-          Transforms.insertNodes(editor, {
-            type: 'paragraph',
-            children: [{ text: line }],
-          } as TextElementType);
-        } else {
-          Transforms.insertText(editor, line);
-        }
-      });
+      insertData(data);
     }
+
   };
 
   return editor;
