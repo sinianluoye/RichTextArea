@@ -105,7 +105,7 @@ const renderImageElement = ({
   );
 };
 
-export const deserialize = (el:HTMLElement, editor:Editor, isInBody:boolean[]|null = null) => {
+export const deserialize = (el:ChildNode|HTMLElement, editor:Editor, isInBody:boolean[]|null = null) => {
   if (isInBody === null) {
     isInBody = [false];
   }
@@ -122,7 +122,7 @@ export const deserialize = (el:HTMLElement, editor:Editor, isInBody:boolean[]|nu
       return;
     }
   }
-  if (el.className === "ant-image-mask") {
+  if ('className' in el && el.className === "ant-image-mask") {
     return;
   }
   
