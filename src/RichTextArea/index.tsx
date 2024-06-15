@@ -105,7 +105,19 @@ const renderImageElement = ({
   );
 };
 
-export const deserialize = (el:ChildNode|HTMLElement, editor:Editor, isInBody:boolean[]|null = null) => {
+const isElementCausingLineBreak = (element:HTMLElement) => {
+  var previousSibling = element.previousElementSibling;
+  if (!previousSibling) {
+      return false;
+  }
+  var elementRect = element.getBoundingClientRect();
+  var previousSiblingRect = previousSibling.getBoundingClientRect();
+
+  return elementRect.top !== previousSiblingRect.top;
+}
+
+
+const deserialize = (el:HTMLElement, editor:Editor, isInBody:boolean[]|null = null) => {
   if (isInBody === null) {
     isInBody = [false];
   }
@@ -152,8 +164,13 @@ export const deserialize = (el:ChildNode|HTMLElement, editor:Editor, isInBody:bo
     Transforms.move(editor, { distance: 1, unit: 'offset' });
     return;
   }
+  if (['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(el.nodeName)) {
+    if (isElementCausingLineBreak(el)) {
+      Transforms.insertText(editor, "\n");
+    }
+  }
   let parent = el;
-  Array.from(parent.childNodes).forEach((x) => deserialize(x, editor, isInBody));
+  Array.from(parent.childNodes).forEach((x) => deserialize(x as HTMLElement, editor, isInBody));
 }
 
 

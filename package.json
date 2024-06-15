@@ -1,6 +1,6 @@
 {
   "name": "@sinianluoye/rich-text-area",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "a text area with image",
   "license": "MIT",
   "module": "dist/index.js",
