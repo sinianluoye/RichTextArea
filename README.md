@@ -4,6 +4,9 @@
 [![NPM downloads](http://img.shields.io/npm/dm/@sinianluoye/rich-text-area.svg?style=flat)](https://npmjs.org/package/@sinianluoye/rich-text-area)
 
 a text area with image
+# DEMO
+
+![demo](demo/demo.gif)
 
 ## Usage
 
